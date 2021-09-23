@@ -1,0 +1,23 @@
+## BASE IMAGE
+FROM alpine:latest
+
+## INSTALL PACKAGES
+RUN apk add --no-cache \
+	bash autoconf libzip apache2 php7-apache2 php7 php7-fpm php7-opcache php7-zlib php7-curl php7-mysqli  php7-json php7-openssl php7-phar php7-mbstring  \
+    php7-ctype php7-dom php7-exif php7-fileinfo php7-gd php7-iconv php7-imagick php7-json php7-mbstring php7-phar php7-posix php7-redis php7-session php7-tokenizer \
+    php7-xml php7-xmlreader php7-xmlwriter php7-zip php7-soap php7-sockets
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+	&& php composer-setup.php #--install-dir=/bin #--filename=composer \
+	&& php -r "unlink('composer-setup.php');" \
+	&& php -d memory_limit=-1 composer.phar require aws/aws-sdk-php
+
+## Transfer logs
+RUN ln -sf /dev/stdout /var/log/apache2/access.log && ln -sf /dev/stderr /var/log/apache2/error.log
+
+## Setup the meddleware
+COPY ./config/php.ini /etc/php7/php.ini
+COPY ./config/httpd.conf /etc/apache2/httpd.conf
+
+## Excute command
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
