@@ -6,8 +6,8 @@ phases:
       python: latest
   pre_build:
     commands:
-      - echo "Pre build stage"
-      - echo "Sync git yaml"
+      - echo "Pre build stage..."
+      - echo "Clone the git yaml..."
       - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
       - git config credential.helper 'store'
       - git clone ${GIT_URL}
@@ -16,18 +16,18 @@ phases:
       - $(aws ecr get-login --no-include-email --region ${AWS_REGION} --registry-ids ${ACCOUNT_ID})
   build:
     commands:
-      - echo "Build stage"
+      - echo "Build stage..."
       - echo Building the Docker image... `date`
       - docker build -t ${ECR_REPO}:${CODEBUILD_BUILD_NUMBER} .
       - docker tag ${ECR_REPO}:${CODEBUILD_BUILD_NUMBER} ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}
       - docker push ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}
   post_build:
     commands:
-      - echo "Post build stage"
+      - echo "Post build stage..."
       - cd ${CD_REPO_NAME}
-      - sed -i "/        image:/ c\        image: ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml
+      - sed -i "/image:/ c\image:${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml
       - git add .
-      - git commit "change container iamge"
+      - git commit "change container iamge ${CODEBUILD_BUILD_NUMBER}"
       - git push
 #reports:
   #report-name-or-arn:
