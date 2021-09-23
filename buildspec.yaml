@@ -8,14 +8,8 @@ phases:
     commands:
       - echo "Pre build stage..."
       - echo "Clone the git yaml..."
-      - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
-      - pwd
-      - ls -al ~/
-      - cat ~/.git-credentials
-      - git log 
-      - git init
-      - git config credential.helper 'store'
-      - git clone ${GIT_URL}
+      - echo "https://${GIT_ID}:${GIT_PW}@${GIT_CD_URL}" > ~/.git-credentials
+      - git clone ${GIT_CD_URL}
       - echo "Logging in to Amazon ECR..."
       - $(aws ecr get-login --no-include-email --region ${AWS_REGION} --registry-ids ${ACCOUNT_ID})
   build:
