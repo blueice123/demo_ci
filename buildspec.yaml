@@ -1,9 +1,10 @@
 phases:
   install:
     commands:    
-    - echo "https://username:password@bitbucket.org" > ~/.git-credentials
+    - echo "https://$ID:$PW@https://github.com/blueice123/demo_ci.git" > ~/.git-credentials
     - git config credential.helper 'store'
-    #https://git-scm.com/docs/git-credential-store
+
+sed -e '/abc/ c\123'
 
 
 version: 0.2
@@ -11,24 +12,29 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto8
+      python: latest
   pre_build:
     commands:
-       - echo "Pre build stage"
-       - java -version
+      - echo "Pre build stage"
+      - echo "Sync git yaml"
+      - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
+      - git config credential.helper 'store'
+      - git clone ${GIT_URL}
+      - ls -al 
+      - echo "Logging in to Amazon ECR..."
+      - $(aws ecr get-login --no-include-email --region ${AWS_REGION} --registry-ids ${ACCOUNT_ID})
   build:
     commands:
-       - echo "Build stage"
-       - ./gradlew build
-       - mv ./build/libs/*.jar ./
-       - ls -al 
-  # post_build:
-  #   commands:
-  #      - echo "Post build stage"
-  #      - nohup java -jar -Dserver.port=$PORT ./build/libs/spring-boot-helloworld-0.0.1-SNAPSHOT.jar >/dev/null 2>&1 &
-  #      - sleep 60
-  #      - sh ./script/service_validate.sh   
-  #      - sudo killall java
+      - echo "Build stage"
+      - echo Building the Docker image... `date`
+      - docker build -t ${ECR_REPO} .
+      - docker tag docker tag ${ECR_REPO}:latest ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:latest
+      - docker push 119334752141.dkr.ecr.ap-northeast-2.amazonaws.com/hsy-crossaccount-test:latest
+  post_build:
+    commands:
+      - echo "Post build stage"
+      - 
+
 #reports:
   #report-name-or-arn:
     #files:
