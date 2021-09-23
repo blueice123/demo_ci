@@ -1,7 +1,7 @@
 version: 0.2
 
 env:
-  git-credential-helper: yes
+  git-credential-helper: no
 
 phases:
   install:
