@@ -1,8 +1,5 @@
 version: 0.2
 
-env:
-  git-credential-helper: no
-
 phases:
   install:
     runtime-versions:
@@ -15,6 +12,8 @@ phases:
       - pwd
       - ls -al ~/
       - cat ~/.git-credentials
+      - git log 
+      - git init
       - git config credential.helper 'store'
       - git clone ${GIT_URL}
       - echo "Logging in to Amazon ECR..."
