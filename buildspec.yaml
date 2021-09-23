@@ -33,7 +33,7 @@ phases:
       - cat ./.git/config
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
-      - git push origin master
+      - git push
 #reports:
   #report-name-or-arn:
     #files:
