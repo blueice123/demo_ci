@@ -28,12 +28,8 @@ phases:
       - git config --global user.email syha@megazone.com  
       - $(sed -i "/        image:/ c\        image\:\ ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
       - cat server.yaml
-      - git remote -v
-      - ls -al ./.git
-      - cat ~/.git-credentials
-      - cat ./.git/config
       - git add .
-      - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
+      - git commit -m "CodeBuild ${CODEBUILD_BUILD_NUMBER}"
       - git push
 #reports:
   #report-name-or-arn:
