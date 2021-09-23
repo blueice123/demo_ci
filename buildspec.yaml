@@ -12,7 +12,7 @@ phases:
       - echo "Pre build stage..."
       - echo "Clone the git yaml..."
       - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
-      - git config credential.helper 'store'
+      - git config credential.helper 'store' ~/.git-credentials
       - git clone ${GIT_URL}
       - ls -al 
       - echo "Logging in to Amazon ECR..."
