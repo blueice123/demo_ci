@@ -25,7 +25,7 @@ phases:
       - ls -al 
       - cd ${CD_REPO_NAME}
       - ls -al
-      - $(sed -i "/        image:/ c\        image':' ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
+      - $(sed -i "/        image:/ c\        image\:\ ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
       - cat server.yaml
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
