@@ -1,12 +1,3 @@
-phases:
-  install:
-    commands:    
-    - echo "https://$ID:$PW@https://github.com/blueice123/demo_ci.git" > ~/.git-credentials
-    - git config credential.helper 'store'
-
-sed -e '/abc/ c\123'
-
-
 version: 0.2
 
 phases:
