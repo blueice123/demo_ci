@@ -31,7 +31,6 @@ phases:
       - git remote -v
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
-      - git remote set-url origin git@github.com:${GIT_ID}/${CD_REPO_NAME}.git
       - git push origin master
 #reports:
   #report-name-or-arn:
