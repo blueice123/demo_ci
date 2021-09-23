@@ -21,6 +21,9 @@ phases:
   post_build:
     commands:
       - echo "Post build stage..."
+      - git config credential.helper 'store' --file=~/.git-credentials
+      - git config --global user.name "CodeBuild ${CODEBUILD_BUILD_NUMBER}"
+      - git config --global user.email syha@megazone.com
       - git clone ${GIT_CD_URL}
       - ls -al 
       - cd ${CD_REPO_NAME}
