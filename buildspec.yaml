@@ -23,14 +23,14 @@ phases:
       - echo "Post build stage..."
       - git clone ${GIT_CD_URL}
       - cd ${CD_REPO_NAME}
-      - git config --local credential.helper store 
+      - git config --local credential.helper cache --timeout=300 --file=~/.git-credentials
       - git config --local user.name "CodeBuild ${CODEBUILD_BUILD_NUMBER}"
       - git config --local user.email syha@megazone.com
       - $(sed -i "/        image:/ c\        image\:\ ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
       - cat server.yaml
       - git remote -v
       - ls -al ./.git
-      - cat ./.git/*
+      - cat ./.git/config
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
       - git push origin master
