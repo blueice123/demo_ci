@@ -12,9 +12,10 @@ phases:
       - echo "Pre build stage..."
       - echo "Clone the git yaml..."
       - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
+      - pwd
       - ls -al ~/
       - cat ~/.git-credentials
-      - git config credential.helper 'store' ~/.git-credentials
+      - git config credential.helper 'store'
       - git clone ${GIT_URL}
       - echo "Logging in to Amazon ECR..."
       - $(aws ecr get-login --no-include-email --region ${AWS_REGION} --registry-ids ${ACCOUNT_ID})
@@ -29,7 +30,7 @@ phases:
     commands:
       - echo "Post build stage..."
       - cd ${CD_REPO_NAME}
-      - $(sed -i "/        image:/ c\        image:${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
+      - $(sed -i "/        image:/ c\        image':' ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
       - echo " "
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
