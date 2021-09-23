@@ -9,7 +9,7 @@ phases:
       - echo "Pre build stage..."
       - echo "Clone the git yaml..."
       - echo "https://${GIT_ID}:${GIT_PW}@${GIT_CD_URL}" > ~/.git-credentials
-      - git clone ${GIT_CD_URL}
+      - git config credential.helper 'store'
       - echo "Logging in to Amazon ECR..."
       - $(aws ecr get-login --no-include-email --region ${AWS_REGION} --registry-ids ${ACCOUNT_ID})
   build:
@@ -22,6 +22,7 @@ phases:
   post_build:
     commands:
       - echo "Post build stage..."
+      - git clone ${GIT_CD_URL}
       - cd ${CD_REPO_NAME}
       - $(sed -i "/        image:/ c\        image':' ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}" server.yaml)
       - echo " "
