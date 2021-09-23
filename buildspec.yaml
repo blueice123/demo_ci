@@ -30,6 +30,7 @@ phases:
       - cat server.yaml
       - git remote -v
       - ls -al ./.git
+      - cat ~/.git-credentials
       - cat ./.git/config
       - git add .
       - git commit -m "change container iamge ${CODEBUILD_BUILD_NUMBER}"
