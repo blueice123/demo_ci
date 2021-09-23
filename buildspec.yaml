@@ -6,7 +6,6 @@ phases:
       python: latest
   pre_build:
     commands:
-      - echo ${CODEBUILD_BUILD_NUMBER}
       - echo "Pre build stage"
       - echo "Sync git yaml"
       - echo "https://${GIT_ID}:${GIT_PW}@${GIT_URL}" > ~/.git-credentials
@@ -19,8 +18,8 @@ phases:
     commands:
       - echo "Build stage"
       - echo Building the Docker image... `date`
-      - docker build -t ${ECR_REPO} .
-      - docker tag docker tag ${ECR_REPO}:latest ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}
+      - docker build -t ${ECR_REPO}:${CODEBUILD_BUILD_NUMBER} .
+      - docker tag ${ECR_REPO}:${CODEBUILD_BUILD_NUMBER} ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}
       - docker push ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${CODEBUILD_BUILD_NUMBER}
   post_build:
     commands:
