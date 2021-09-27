@@ -10,6 +10,20 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 	&& php composer-setup.php #--install-dir=/bin #--filename=composer \
 	&& php -r "unlink('composer-setup.php');" \
 	&& php -d memory_limit=-1 composer.phar require aws/aws-sdk-php
+## Install 
+# RUN apk update \
+#     && apk --no-cache add curl \
+#     && apk --no-cache add unzip \
+#     && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+#     && unzip awscliv2.zip \
+#     && ./aws/install   
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install \
+        awscli \
+    && rm -rf /var/cache/apk/*
 
 ## Transfer logs
 RUN ln -sf /dev/stdout /var/log/apache2/access.log && ln -sf /dev/stderr /var/log/apache2/error.log
@@ -17,6 +31,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log && ln -sf /dev/stderr /var/lo
 ## Setup the meddleware
 COPY ./config/php.ini /etc/php7/php.ini
 COPY ./config/httpd.conf /etc/apache2/httpd.conf
+COPY ./config/preStop.sh /preStop.sh
 
 ## Excute command
 EXPOSE 80
