@@ -7,6 +7,5 @@ TARGET_GROUP_ARN="arn:aws:elasticloadbalancing:ap-northeast-2:239234376445:targe
 aws elbv2 deregister-targets --region $REGION \
     --target-group-arn $TARGET_GROUP_ARN \
     --targets Id=$TARGET
-    
 
 sleep 10
