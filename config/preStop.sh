@@ -8,4 +8,4 @@ aws elbv2 deregister-targets --region $REGION \
     --target-group-arn $TARGET_GROUP_ARN \
     --targets Id=$TARGET
 
-sleep 10
+sleep 30
