@@ -1,4 +1,4 @@
 <?php
 	echo gethostname(); // may output e.g,: sandie
-	echo "	v3\n"
+	echo "	v4\n"
 ?>
