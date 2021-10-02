@@ -25,6 +25,11 @@ RUN apk add --no-cache \
         awscli \
     && rm -rf /var/cache/apk/*
 
+## Time zone  
+RUN apk --no-cache add tzdata \
+	cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
+	apk del tzdata
+
 ## Transfer logs
 RUN ln -sf /dev/stdout /var/log/apache2/access.log && ln -sf /dev/stderr /var/log/apache2/error.log
 
