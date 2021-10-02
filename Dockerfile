@@ -1,6 +1,9 @@
 ## BASE IMAGE
 FROM 239234376445.dkr.ecr.ap-northeast-2.amazonaws.com/demo:origin_v3
 
+## Time zone  
+RUN apk --no-cache add tzdata && cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo Asia/Seoul >/etc/timezone 
+
 ## Setup the meddleware
 COPY ./config/php.ini /etc/php7/php.ini
 COPY ./config/httpd.conf /etc/apache2/httpd.conf
